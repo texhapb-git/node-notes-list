@@ -28,6 +28,28 @@ async function addNote(title) {
 	console.log(chalk.bgGreen('Note was added!'));
 }
 
+async function editNote(id, title) {
+	const notes = await getNotes();
+
+	const updatingNote = notes.find(note => note.id === id);
+
+	if (updatingNote) {
+		const updatedNotes = notes.map(note => {
+			if (note.id === id) {
+				return { ...note, title }
+			}
+
+			return note;
+		});
+
+		await writeNotes(updatedNotes);
+		console.log(chalk.green(`Note with id ${id} was updated`));
+	} else {
+		console.log(chalk.red(`Not found note with id: ${id}`));
+	}
+
+}
+
 async function removeNote(id) {
 	const notes = await getNotes();
 
@@ -54,5 +76,5 @@ async function printNotes() {
 
 
 module.exports = {
-	addNote, removeNote, printNotes
+	addNote, editNote, removeNote, printNotes
 }
